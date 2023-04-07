@@ -2,6 +2,7 @@ package com.example.mailsecuritybackend.controller;
 
 import com.example.mailsecuritybackend.model.Mail;
 import com.example.mailsecuritybackend.service.MailService;
+import com.example.mailsecuritybackend.service.impl.MailServiceImpl;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,10 @@ public class MailController {
 
     @GetMapping
     public List<Mail> GetAllMails() {
-        return mailService.getAllMail();
+        String host = "outlook.office365.com";
+        String username = "adrietest25@outlook.com";
+        String password = "TEST25!?";
+
+        return MailServiceImpl.check(host, username, password);
     }
 }

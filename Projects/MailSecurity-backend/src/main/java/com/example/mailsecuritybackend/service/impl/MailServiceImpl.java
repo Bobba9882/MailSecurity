@@ -4,12 +4,14 @@ import com.example.mailsecuritybackend.model.Mail;
 import com.example.mailsecuritybackend.service.MailService;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.mail.*;
+import javax.mail.internet.MimeMultipart;
 import javax.mail.search.FlagTerm;
 
 @Service
@@ -38,7 +40,7 @@ public class MailServiceImpl implements MailService {
     }
 
 
-    public static List<Mail> check(String host,String user,
+    public  List<Mail> check(String host,String user,
                              String password)
     {
         List<Mail> mails = new ArrayList<>();
@@ -64,12 +66,11 @@ public class MailServiceImpl implements MailService {
             // retrieve the messages from the folder in an array and print it
             Message[] messages = emailFolder.getMessages();
 
-            for (int i = 0, n = messages.length; i < n; i++) {
-                Message message = messages[i];
+            for (Message message : messages) {
                 Mail mail = new Mail();
                 mail.sender = Arrays.toString(message.getFrom());
                 mail.title = message.getSubject();
-                mail.body = message.getContent().toString();
+                mail.body = getTextFromMessage(message);
                 mails.add(mail);
             }
 
@@ -81,6 +82,43 @@ public class MailServiceImpl implements MailService {
             e.printStackTrace();
         }
         return mails;
+    }
+
+    private String getTextFromMessage(Message message) throws MessagingException, IOException {
+        if (message.isMimeType("text/plain")) {
+            return message.getContent().toString();
+        }
+        if (message.isMimeType("multipart/*")) {
+            MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
+            return getTextFromMimeMultipart(mimeMultipart);
+        }
+        return "";
+    }
+
+    private String getTextFromMimeMultipart(
+            MimeMultipart mimeMultipart)  throws MessagingException, IOException{
+        String result = "";
+        for (int i = 0; i < mimeMultipart.getCount(); i++) {
+            BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+            if (bodyPart.isMimeType("text/plain")) {
+                return result + "\n" + bodyPart.getContent(); // without return, same text appears twice in my tests
+            }
+            result += this.parseBodyPart(bodyPart);
+        }
+        return result;
+    }
+
+    private String parseBodyPart(BodyPart bodyPart) throws MessagingException, IOException {
+        if (bodyPart.isMimeType("text/html")) {
+            return "\n" + org.jsoup.Jsoup
+                    .parse(bodyPart.getContent().toString())
+                    .text();
+        }
+        if (bodyPart.getContent() instanceof MimeMultipart){
+            return getTextFromMimeMultipart((MimeMultipart)bodyPart.getContent());
+        }
+
+        return "";
     }
 
 

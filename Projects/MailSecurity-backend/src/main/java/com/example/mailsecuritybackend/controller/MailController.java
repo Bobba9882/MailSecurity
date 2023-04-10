@@ -26,6 +26,8 @@ public class MailController {
         String username = "adrietest25@outlook.com";
         String password = "TEST25!?";
 
-        return MailServiceImpl.check(host, username, password);
+        MailServiceImpl test = new MailServiceImpl();
+
+        return test.check(host, username, password);
     }
 }

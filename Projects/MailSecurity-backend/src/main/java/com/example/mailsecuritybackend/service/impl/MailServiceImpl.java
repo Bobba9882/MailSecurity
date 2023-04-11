@@ -51,8 +51,10 @@ public class MailServiceImpl implements MailService {
                 Mail mail = new Mail();
                 mail.id = id;
                 mail.sender = Arrays.toString(message.getFrom());
+                mail.receiver = Arrays.toString(message.getAllRecipients());
                 mail.title = message.getSubject();
                 mail.body = getTextFromMessage(message);
+                mail.date = message.getSentDate();
                 mails.add(mail);
                 id++;
             }

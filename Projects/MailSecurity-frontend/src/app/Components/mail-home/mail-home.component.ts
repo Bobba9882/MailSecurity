@@ -10,7 +10,7 @@ import {MailService} from "../../Services/mail.service";
 export class MailHomeComponent implements OnInit{
 
   Mails : Mail[]
-  selectedMail: Mail = new Mail()
+  selectedMail: Mail
 
   constructor(private mailService: MailService) {
   }
@@ -24,6 +24,7 @@ export class MailHomeComponent implements OnInit{
   }
 
   selectMail(mail : Mail): void {
+    console.log(mail.date)
     this.selectedMail = mail
   }
 

@@ -4,4 +4,5 @@ export class Mail {
   receiver : string;
   title : string;
   body : string;
+  date : Date
 }

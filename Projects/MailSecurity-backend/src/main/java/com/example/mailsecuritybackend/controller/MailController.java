@@ -22,12 +22,6 @@ public class MailController {
 
     @GetMapping
     public List<Mail> GetAllMails() {
-        String host = "outlook.office365.com";
-        String username = "adrietest25@outlook.com";
-        String password = "TEST25!?";
-
-        MailServiceImpl test = new MailServiceImpl();
-
-        return test.check(host, username, password);
+        return mailService.getAllMail();
     }
 }

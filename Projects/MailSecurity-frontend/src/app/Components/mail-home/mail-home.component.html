@@ -1,5 +1,18 @@
-<ul class="col-4 list-group">
-  <div class="list-group-item list-group-item-action p-3" *ngFor="let mail of Mails">
-    {{mail.title}}
+<div class="row">
+  <h1>Mailing Application</h1>
+</div>
+
+<div class="row">
+  <div class="col-3">
+    <ul class="list-group">
+      <div class="list-group-item list-group-item-action p-3" *ngFor="let mail of Mails" (click)="selectMail(mail.id)">
+        {{mail.title}}
+      </div>
+    </ul>
   </div>
-</ul>
+  <div class="col-5">
+    <h3>{{selectedMail.title}}</h3>
+    <p [innerHTML]="selectedMail.body | replaceLineBreaks"></p>
+  </div>
+</div>
+

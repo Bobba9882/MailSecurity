@@ -19,30 +19,10 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public List<Mail> getAllMail() {
-        List<Mail> mails = new ArrayList<>();
+        String host = "outlook.office365.com";
+        String user = "adrietest25@outlook.com";
+        String password = "TEST25!?";
 
-        for (int i = 0; i < 10; i++){
-            Mail mail = new Mail();
-            mail.body = "TEST TEST TEST" + i;
-            mail.title = "TITLE TEST " + i;
-            mails.add(mail);
-        }
-
-        return mails;
-    }
-
-    @Override
-    public Mail getSingleMail(String title) {
-        Mail mail = new Mail();
-        mail.body = "TEST TEST TEST";
-        mail.title = "TITLE TEST";
-        return mail;
-    }
-
-
-    public  List<Mail> check(String host,String user,
-                             String password)
-    {
         List<Mail> mails = new ArrayList<>();
         try {
 
@@ -63,15 +43,18 @@ public class MailServiceImpl implements MailService {
             Folder emailFolder = store.getFolder("INBOX");
             emailFolder.open(Folder.READ_ONLY);
 
+            int id = 0;
             // retrieve the messages from the folder in an array and print it
             Message[] messages = emailFolder.getMessages();
 
             for (Message message : messages) {
                 Mail mail = new Mail();
+                mail.id = id;
                 mail.sender = Arrays.toString(message.getFrom());
                 mail.title = message.getSubject();
                 mail.body = getTextFromMessage(message);
                 mails.add(mail);
+                id++;
             }
 
             //close the store and folder objects
@@ -82,6 +65,14 @@ public class MailServiceImpl implements MailService {
             e.printStackTrace();
         }
         return mails;
+    }
+
+    @Override
+    public Mail getSingleMail(String title) {
+        Mail mail = new Mail();
+        mail.body = "TEST TEST TEST";
+        mail.title = "TITLE TEST";
+        return mail;
     }
 
     private String getTextFromMessage(Message message) throws MessagingException, IOException {
@@ -101,7 +92,7 @@ public class MailServiceImpl implements MailService {
         for (int i = 0; i < mimeMultipart.getCount(); i++) {
             BodyPart bodyPart = mimeMultipart.getBodyPart(i);
             if (bodyPart.isMimeType("text/plain")) {
-                return result + "\n" + bodyPart.getContent(); // without return, same text appears twice in my tests
+                return result + bodyPart.getContent(); // without return, same text appears twice in my tests
             }
             result += this.parseBodyPart(bodyPart);
         }
@@ -110,7 +101,7 @@ public class MailServiceImpl implements MailService {
 
     private String parseBodyPart(BodyPart bodyPart) throws MessagingException, IOException {
         if (bodyPart.isMimeType("text/html")) {
-            return "\n" + org.jsoup.Jsoup
+            return  org.jsoup.Jsoup
                     .parse(bodyPart.getContent().toString())
                     .text();
         }

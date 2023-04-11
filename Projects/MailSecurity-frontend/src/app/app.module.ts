@@ -5,11 +5,13 @@ import { AppComponent } from './app.component';
 import { MailHomeComponent } from './Components/mail-home/mail-home.component';
 import { AppRoutingModule } from './app-routing.module';
 import {HttpClient, HttpClientModule} from "@angular/common/http";
+import { ReplaceLineBreaksPipe } from './Pipes/replace-line-breaks.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
-    MailHomeComponent
+    MailHomeComponent,
+    ReplaceLineBreaksPipe
   ],
   imports: [
     BrowserModule,

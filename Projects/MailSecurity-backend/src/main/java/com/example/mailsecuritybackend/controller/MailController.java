@@ -2,6 +2,7 @@ package com.example.mailsecuritybackend.controller;
 
 import com.example.mailsecuritybackend.model.Mail;
 import com.example.mailsecuritybackend.service.MailService;
+import com.example.mailsecuritybackend.service.impl.MailServiceImpl;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -9,9 +9,9 @@ import java.util.regex.Pattern;
 @Service
 public class TextCensoringServiceImpl implements TextCensoringService {
 
-    private final Pattern phonePattern = Pattern.compile("[+]?[(]?[0-9]{3}[)]?[-\\s.]?[0-9]{3}[-\\s.]?[0-9]{4,6}");
+    private final Pattern phonePattern = Pattern.compile("(?:0|(?:\\+|00) ?31 ?)(?:[1-9] ?(?:[0-9] ?){8}|6 ?-? ?[1-9] ?(?:[0-9] ?){7}|[1,2345789]\\d ?-? ?[1-9] ?(?:[0-9] ?){6}|[1,2345789]\\d{2} ?-? ?[1-9] ?(?:[0-9] ?){5})");
 
-    private final Pattern ibanPattern = Pattern.compile("\\b[A-Z]{2}[0-9]{2}[A-Z]{4}[0-9]{10}\\b");
+    private final Pattern ibanPattern = Pattern.compile("NL[0-9]{2} ?[A-Z]{4} ?[0-9]{4} ?[0-9]{4} ?[0-9]{2}");
 
     @Override
     public String CensorSensitiveData(String content) {

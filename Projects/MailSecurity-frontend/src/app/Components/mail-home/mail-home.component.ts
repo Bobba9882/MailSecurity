@@ -23,8 +23,8 @@ export class MailHomeComponent implements OnInit{
     })
   }
 
-  selectMail(id: number): void {
-    this.selectedMail = this.Mails[id]
+  selectMail(mail : Mail): void {
+    this.selectedMail = mail
   }
 
 }

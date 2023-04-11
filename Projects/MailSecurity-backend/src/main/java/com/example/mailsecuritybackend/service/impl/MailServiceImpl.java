@@ -19,49 +19,47 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public List<Mail> getAllMail() {
+        // Set up email account credentials
         String host = "outlook.office365.com";
-        String user = "adrietest25@outlook.com";
+        String username = "adrietest25@outlook.com";
         String password = "TEST25!?";
-
         List<Mail> mails = new ArrayList<>();
         try {
+            // Set up email properties
+            Properties emailProperties = new Properties();
+            emailProperties.put("mail.pop3.host", host);
+            emailProperties.put("mail.pop3.port", "995");
+            emailProperties.put("mail.pop3.starttls.enable", "true");
 
-            //create properties field
-            Properties properties = new Properties();
+            // Create email session
+            Session emailSession = Session.getDefaultInstance(emailProperties);
 
-            properties.put("mail.pop3.host", host);
-            properties.put("mail.pop3.port", "995");
-            properties.put("mail.pop3.starttls.enable", "true");
-            Session emailSession = Session.getDefaultInstance(properties);
+            // Connect to email server using POP3 protocol
+            Store emailStore = emailSession.getStore("pop3s");
+            emailStore.connect(host, username, password);
 
-            //create the POP3 store object and connect with the pop server
-            Store store = emailSession.getStore("pop3s");
+            // Open INBOX folder and retrieve email messages
+            Folder inboxFolder = emailStore.getFolder("INBOX");
+            inboxFolder.open(Folder.READ_ONLY);
+            Message[] messages = inboxFolder.getMessages();
 
-            store.connect(host, user, password);
-
-            //create the folder object and open it
-            Folder emailFolder = store.getFolder("INBOX");
-            emailFolder.open(Folder.READ_ONLY);
-
-            int id = 0;
-            // retrieve the messages from the folder in an array and print it
-            Message[] messages = emailFolder.getMessages();
-
+            int mailId = 0;
+            // Iterate through messages and create Mail objects for each
             for (Message message : messages) {
                 Mail mail = new Mail();
-                mail.id = id;
+                mail.id = mailId;
                 mail.sender = Arrays.toString(message.getFrom());
                 mail.receiver = Arrays.toString(message.getAllRecipients());
                 mail.title = message.getSubject();
                 mail.body = getTextFromMessage(message);
                 mail.date = message.getSentDate();
                 mails.add(mail);
-                id++;
+                mailId++;
             }
 
-            //close the store and folder objects
-            emailFolder.close(false);
-            store.close();
+            // Close folder and store
+            inboxFolder.close(false);
+            emailStore.close();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -69,48 +67,51 @@ public class MailServiceImpl implements MailService {
         return mails;
     }
 
-    @Override
-    public Mail getSingleMail(String title) {
-        Mail mail = new Mail();
-        mail.body = "TEST TEST TEST";
-        mail.title = "TITLE TEST";
-        return mail;
-    }
-
+    // Extracts text from a given message object
     private String getTextFromMessage(Message message) throws MessagingException, IOException {
+        // If message is plain text
         if (message.isMimeType("text/plain")) {
             return message.getContent().toString();
         }
+        // If message is multipart
         if (message.isMimeType("multipart/*")) {
             MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
             return getTextFromMimeMultipart(mimeMultipart);
         }
+        // Otherwise return an empty string
         return "";
     }
 
-    private String getTextFromMimeMultipart(
-            MimeMultipart mimeMultipart)  throws MessagingException, IOException{
-        String result = "";
+    // Extracts text from a given multipart object
+    private String getTextFromMimeMultipart(MimeMultipart mimeMultipart) throws MessagingException, IOException {
+        StringBuilder result = new StringBuilder();
         for (int i = 0; i < mimeMultipart.getCount(); i++) {
             BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+            // If body part is plain text
             if (bodyPart.isMimeType("text/plain")) {
-                return result + bodyPart.getContent(); // without return, same text appears twice in my tests
+                // Append the text to result and return
+                result.append(bodyPart.getContent());
+                return result.toString();
             }
-            result += this.parseBodyPart(bodyPart);
+            // Append the parsed body part to result
+            result.append(parseBodyPart(bodyPart));
         }
-        return result;
+        // Return the result
+        return result.toString();
     }
 
+    // Parses a given body part and returns its plain text content
     private String parseBodyPart(BodyPart bodyPart) throws MessagingException, IOException {
+        // If body part is HTML
         if (bodyPart.isMimeType("text/html")) {
-            return  org.jsoup.Jsoup
-                    .parse(bodyPart.getContent().toString())
-                    .text();
+        // Parse the HTML and extract the plain text
+            return org.jsoup.Jsoup.parse(bodyPart.getContent().toString()).text();
         }
-        if (bodyPart.getContent() instanceof MimeMultipart){
-            return getTextFromMimeMultipart((MimeMultipart)bodyPart.getContent());
+        // If body part is multipart, extract its plain text content
+        if (bodyPart.getContent() instanceof MimeMultipart) {
+            return getTextFromMimeMultipart((MimeMultipart) bodyPart.getContent());
         }
-
+        // Otherwise return an empty string
         return "";
     }
 

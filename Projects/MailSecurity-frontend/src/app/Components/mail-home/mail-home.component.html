@@ -4,7 +4,9 @@
     <div class="row">
       <div class="col-md-3 mb-3">
         <div class="list-group">
-          <button type="button" class="list-group-item list-group-item-action" *ngFor="let mail of Mails | orderBy: 'date': true" (click)="selectMail(mail)" [ngClass]="{'active': selectedMail === mail}">
+          <button type="button" class="list-group-item list-group-item-action"
+                  *ngFor="let mail of Mails | orderBy: 'date': true"
+                  (click)="selectMail(mail)" [ngClass]="{'active': selectedMail === mail}">
             <span class="fw-bold">{{mail.title}}</span>
             <br>
             <small class="text-muted">{{mail.date | date: 'MMM d'}}</small>

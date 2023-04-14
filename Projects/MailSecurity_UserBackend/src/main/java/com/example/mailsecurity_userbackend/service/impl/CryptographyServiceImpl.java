@@ -22,7 +22,7 @@ public class CryptographyServiceImpl implements CryptographyService {
 
 
     @Override
-    public String encrypt(String plainText) throws Exception{
+    public String Encrypt(String plainText) throws Exception{
         Key key = generateKey();
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, key);
@@ -31,7 +31,7 @@ public class CryptographyServiceImpl implements CryptographyService {
     }
 
     @Override
-    public String decrypt(String encryptedText) throws Exception{
+    public String Decrypt(String encryptedText) throws Exception{
         Key key = generateKey();
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, key);

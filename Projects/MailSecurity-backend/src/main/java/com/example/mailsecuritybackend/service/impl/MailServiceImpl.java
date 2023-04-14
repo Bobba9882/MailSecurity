@@ -18,11 +18,9 @@ import javax.mail.search.FlagTerm;
 public class MailServiceImpl implements MailService {
 
     @Override
-    public List<Mail> getAllMail() {
+    public List<Mail> getAllMail(String username, String password) {
         // Set up email account credentials
         String host = "outlook.office365.com";
-        String username = "adrietest25@outlook.com";
-        String password = "TEST25!?";
         List<Mail> mails = new ArrayList<>();
         try {
             // Set up email properties

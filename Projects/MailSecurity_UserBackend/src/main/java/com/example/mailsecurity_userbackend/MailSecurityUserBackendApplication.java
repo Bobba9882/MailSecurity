@@ -5,6 +5,7 @@ import com.example.mailsecurity_userbackend.model.Client;
 import com.example.mailsecurity_userbackend.model.User;
 import com.example.mailsecurity_userbackend.repository.ClientRepository;
 import com.example.mailsecurity_userbackend.repository.UserRepository;
+import com.example.mailsecurity_userbackend.service.CryptographyService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,16 +22,16 @@ public class MailSecurityUserBackendApplication {
     }
 
 //    @Bean
-//    CommandLineRunner commandLineRunner(UserRepository users, ClientRepository clients, PasswordEncoder passwordEncoder){
+//    CommandLineRunner commandLineRunner(UserRepository users, ClientRepository clients, PasswordEncoder passwordEncoder, CryptographyService cryptographyService) throws Exception {
 //
 //        Client client = new Client();
-//        client.setEmail("user@mail.nl");
-//        client.setPassword("password");
+//        client.setEmail(cryptographyService.encrypt("adrietest25@outlook.com"));
+//        client.setPassword(cryptographyService.encrypt("TEST25!?"));
 //
 //
 //        User user = new User();
-//        user.setUsername("user");
-//        user.setPassword(passwordEncoder.encode("password")); ;
+//        user.setUsername("karindebeste");
+//        user.setPassword(passwordEncoder.encode("karindebeste")); ;
 //        user.setClient(client);
 //
 //

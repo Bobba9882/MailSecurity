@@ -30,7 +30,7 @@ public class MailController {
 
     @GetMapping("/{id}")
     public List<Mail> GetAllMails(@PathVariable Long id) throws Exception {
-        Client client = clientRepository.findById(id).orElse(null);1
+        Client client = clientRepository.findById(id).orElse(null);
         String email = cryptographyService.Decrypt(client.getEmail());
         String password = cryptographyService.Decrypt(client.getPassword());
         return mailService.GetAllMails(URLEncoder.encode(email), URLEncoder.encode(password));

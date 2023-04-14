@@ -8,10 +8,11 @@ import {Mail} from "../Models/mail";
 })
 export class MailService {
 
-  private mailURL: string = "http://localhost:8080/api/v1/mail"
+  private mailURL: string = "http://localhost:9090/api/v1/mail/"
   constructor(private httpClient : HttpClient) { }
 
   getMails() : Observable<Mail[]>{
-    return this.httpClient.get<Mail[]>(`${this.mailURL}`)
+    let user = JSON.parse(String(localStorage.getItem("user info")))
+    return this.httpClient.get<Mail[]>(`${this.mailURL + user.id}`)
   }
 }

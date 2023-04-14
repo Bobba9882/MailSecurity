@@ -1,0 +1,53 @@
+<!-- Container for the entire mailing application -->
+<div class="container-fluid vh-100 d-flex align-items-center justify-content-center bg-light">
+
+  <!-- Card that holds the list of emails and the selected email's details -->
+  <div class="card border rounded p-3 bg-white w-75 h-80 overflow-auto">
+    <h1 class="card-title text-center mb-4 text-primary">Mailing Application</h1>
+
+    <!-- Row that divides the card into two columns: the email list and the email details -->
+    <div class="row">
+
+      <!-- Column for the email list -->
+      <div class="col-md-3 mb-3">
+        <div class="list-group">
+
+          <!-- Button for each email in the list -->
+          <button type="button" class="list-group-item list-group-item-action"
+                  *ngFor="let mail of Mails | orderBy: 'date': true"
+                  (click)="selectMail(mail)" [ngClass]="{'active': selectedMail === mail}">
+            <span class="fw-bold">{{mail.title}}</span>
+            <br>
+            <small class="text-muted">{{mail.date | date: 'MMM d'}}</small>
+          </button>
+
+        </div>
+      </div>
+
+      <!-- Column for the selected email's details -->
+      <div class="col-md-9">
+
+        <!-- Show the selected email's details if there is a selected email -->
+        <div *ngIf="selectedMail">
+          <div class="border rounded p-3 mb-4">
+            <h2 class="my-3">{{selectedMail.title}}</h2>
+            <p [innerHTML]="selectedMail.body | replaceLineBreaks"></p>
+            <hr>
+            <p class="mb-0"><strong>From:</strong> {{selectedMail.sender}}</p>
+            <p class="mb-0"><strong>To:</strong> {{selectedMail.receiver}}</p>
+            <p class="mb-0"><strong>Date:</strong> {{selectedMail.date | date: 'MMM d, y h:mm a'}}</p>
+          </div>
+        </div>
+
+        <!-- Show a message if there is no selected email -->
+        <div *ngIf="!selectedMail">
+          <p class="text-center text-muted">Select an email to read</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

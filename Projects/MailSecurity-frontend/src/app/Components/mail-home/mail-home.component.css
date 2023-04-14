@@ -1,0 +1,24 @@
+.card {
+  height: 80vh;
+  width: 75%;
+}
+
+.bg-light {
+  background-color: #F5F5F5;
+}
+
+.bg-white {
+  background-color: #FFFFFF;
+}
+
+.text-primary {
+  color: #007BFF;
+}
+
+.vh-100 {
+  height: 100vh;
+}
+
+.overflow-auto {
+  overflow-y: auto;
+}

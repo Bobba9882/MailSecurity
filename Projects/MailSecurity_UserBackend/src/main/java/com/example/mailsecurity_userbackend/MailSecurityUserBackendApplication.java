@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @EnableConfigurationProperties(RsaKeyProperties.class)
 @SpringBootApplication
@@ -20,16 +21,16 @@ public class MailSecurityUserBackendApplication {
     }
 
 //    @Bean
-//    CommandLineRunner commandLineRunner(UserRepository users, ClientRepository clients) {
+//    CommandLineRunner commandLineRunner(UserRepository users, ClientRepository clients, PasswordEncoder passwordEncoder){
 //
 //        Client client = new Client();
-//        client.setEmail("mail@mail.nl");
+//        client.setEmail("user@mail.nl");
 //        client.setPassword("password");
 //
 //
 //        User user = new User();
-//        user.setUserName("HALLO");
-//        user.setPassword("HALLO");
+//        user.setUsername("user");
+//        user.setPassword(passwordEncoder.encode("password")); ;
 //        user.setClient(client);
 //
 //

@@ -25,10 +25,11 @@ public class User {
     private String password;
 
     @Column(name = "username", nullable = false)
-    private String userName;
+    private String username;
 
     @ManyToOne
     @JoinColumn(name="client_id", nullable = false)
     public Client client;
+
 
 }
